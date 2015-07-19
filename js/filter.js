@@ -1,5 +1,20 @@
 var Twitter = require('twitter-node-client').Twitter;
 var natural = require('natural');
+var secrets = require('./secrets.js');
+
+var twitter = new Twitter(secrets.twitter);
+
+ var error = function (err, response, body) {
+    console.log('ERROR [%s]', err);
+};
+var success = function (data) {
+    console.log('Data [%s]', data);
+};
+
+
+twitter.getCustomApiCall('/trends/place.json', { id: 1, exclude: 'hashtags' }, error, function (data) {
+	console.log('Data [%s]', data);
+})
 
 
 /* MUST HAVES */
@@ -12,5 +27,6 @@ var natural = require('natural');
 
 /* NICE TO HAVES */
 /** 1. Degree of conservatism.
-  * 2. Permanent storage.
+  * 2. Permanent storage by manually adding filters.
+  * 3. Display trends in popup.html
   */
