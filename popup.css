@@ -1,21 +1,31 @@
 body {
 	position: relative;
-	width: 300px;
+	width: 320px;
 	height: 400px;
 	background-color: #F5F5F5;
 }
-
 button {
 	font-family: "Helvetica", "Arial", sans-serif;
 	color: white !important;
+	background-color: transparent;
+	height: 25px;
+	width: 64px;
 }
 button:hover {
 	font-weight: bold !important; 
 	color: white !important;
+	background-position: 0px !important;
+	outline: 0 none !important;
+	box-shadow: none !important;
 }
 button:focus {
-	outline: none !important;
+	outline: 0 none !important;
 }
+
+.selected {
+	font-weight: bold !important;
+}
+
 .text-input {
 	width: 150% !important;
 	height: 200% !important;
@@ -23,7 +33,6 @@ button:focus {
 	font-family: "Helvetica", "Arial", sans-serif;
 	text-align: center;
 }
-
 .orange {
 	background-color: #FFC30F;
 }
@@ -42,7 +51,6 @@ button:focus {
 .green {
 	background-color: #6CE54E;
 }
-
 .padding {
 	height: 10px;
 }
@@ -50,6 +58,15 @@ button:focus {
 	display: block !important;
 	text-align: center !important;
 	float: none !important;
-	margin-left: auto !important;
-	margin-right: auto !important;
+	margin-left: 0px !important;
+	margin-right: 0px !important;
+}
+.adjust-padding {
+	padding-right: 20px !important;
+	padding-left: -20px !important;
+}
+#hashtags {
+	float: none !important;
+	padding-right: 25px !important;
+	/*padding-left: -20px !important;*/
 }
