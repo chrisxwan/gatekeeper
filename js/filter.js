@@ -1,11 +1,9 @@
-var Twitter = require('twitter-node-client').Twitter;
 var natural = require('natural');
 var secrets = require('./secrets.js');
 var async = require('async');
 var TfIdf = natural.TfIdf;
 var tfidf = new TfIdf();
 
-var twitter = new Twitter(secrets.twitter);
 
  var error = function (err, response, body) {
     console.log('ERROR [%s]', err);
@@ -14,8 +12,12 @@ var success = function (data) {
     console.log('Data [%s]', data);
 };
 
+var tfidfCounter = 0;
+var concatenatedTrends = "";
+var twitterTrends = [];
+
 var filter = function (elt) {
-	var text = $(elt).find('p').join(" ");
+	var text = $(elt).find('p').toArray().join(" ");
 	tfidf.addDocument(text);
 	if(tfidf.tfidf(concatenatedTrends, tfidfCounter) > 1) {
 		$(elt).remove();
@@ -23,39 +25,30 @@ var filter = function (elt) {
 	tfidfCounter++;
 }
 
+chrome.runtime.onMessage.addListener(function(msg, sender, response) {
+    /* First, validate the message's structure */
+    if ((msg.from === 'popup') && (msg.subject === 'ready')) {
+    	async.series([
+    		function (callback) {
+    			chrome.storage.sync.get("concatenatedTrends", function (result) {
+    				concatenatedTrends = result.concatenatedTrends;
+    			});
+    			callback(null, 'failed to retrieve from db');
+    		},
+    		function (callback) {
+    			$(document).ready(function() {
+					var posts = $("[id*='hyperfeed_story_id']");
+					for(i = 0; i < posts.length; i++) {
+						var currentElt = $(posts[i]);
+						filter(currentElt);
+					}
+				});
+				callback(null, 'failed to filter');
+    		}
+    	]);
+    }
+});
 
-var twitterTrends = [];
-var concatenatedTrends = "";
-var tfidfCounter = 0;
-
-async.series([
-	function (callback) {
-		twitter.getCustomApiCall('/trends/place.json', { id: 23424977, exclude: 'hashtags' }, error, function (data) {
-			var parseJSON = JSON.parse(data)[0]["trends"];
-			for(i=0; i < parseJSON.length; i++) {
-				console.log(parseJSON[i].name);
-				twitterTrends.push(parseJSON[i].name);
-			}
-		});
-		var concatenatedTrends = twitterTrends.join(" ");
-		callback(null, 'twitter api failed');
-	},
-	function (callback) {
-		for(i=0; i < twitterTrends.length; i++) {
-			var appendString = "<li>" + twitterTrends[i] + "</li>";
-			$("#blocked-list").append(appendString);
-		}
-		$(document).ready(function() {
-			var posts = $("[id*='hyperfeed_story_id']");
-			for(i = 0; i < posts.length; i++) {
-				var currentElt = $(post[i]);
-				filter(currentElt);
-			}
-		});
-		callback(null, 'parsing the dom failed');
-	}]
-);
-		
 
 
 

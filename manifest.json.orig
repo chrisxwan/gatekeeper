@@ -12,9 +12,14 @@
     }
   ],
   "browser_action": {
+<<<<<<< HEAD
     "default_icon": "img/gates.png",
     "default_popup": "popup.html",
     "default_icon": "hashtag.png"
+=======
+    "default_icon": "img/gates.jpeg",
+    "default_popup": "html/popup.html"
+>>>>>>> 063cfb44759bc306475950adc3186866dff480d3
   },
   "permissions": [
     "tabs",
