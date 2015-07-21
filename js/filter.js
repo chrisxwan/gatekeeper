@@ -1,6 +1,7 @@
 var natural = require('natural');
 var secrets = require('./secrets.js');
 var async = require('async');
+var sentiment = require('sentiment');
 var TfIdf = natural.TfIdf;
 var tfidf = new TfIdf();
 
@@ -16,6 +17,7 @@ var tfidfCounter = 0;
 var concatenatedTrends = "";
 var twitterTrends = [];
 var blacklist = [];
+var threshold = 0; 
 
 var filter = function (elt) {
 	var pArray = $(elt).find('p');
@@ -24,10 +26,11 @@ var filter = function (elt) {
 		textArray[x] = $(pArray[x]).text();
 	}
 	var text = textArray.join(" ");
+	var concatenatedBlacklist = blacklist.join(" ");
 	console.log(text);
 	tfidf.addDocument(text);
 	for(j = 0; j < blacklist.length; j++){
-		if(tfidf.tfidf(blacklist[j], tfidfCounter) > .05) {
+		if(tfidf.tfidf(concatenatedBlacklist, tfidfCounter) > .05 || sentiment(text).score < threshold-50) {
 			$(elt).remove();
 			break;
 		}
@@ -53,7 +56,11 @@ var filterFeed = function() {
 				blacklist = result.userBlacklist;
 			});
 			callback(null, 'failed to retrieve from db');
+			chrome.storage.sync.get("threshold", function (result) {
+				threshold = result.threshold;
+			});
 			console.log(blacklist);
+			console.log(threshold);
 		},
 		function (callback) {
 			console.log(blacklist);
