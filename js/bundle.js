@@ -16,41 +16,61 @@ var success = function (data) {
 var tfidfCounter = 0;
 var concatenatedTrends = "";
 var twitterTrends = [];
+var blacklist = [];
 
 var filter = function (elt) {
-	var text = $(elt).find('p').toArray().join(" ");
+	var pArray = $(elt).find('p');
+	var textArray = [];
+	for(x=0; x < pArray.length; x++) {
+		textArray[x] = $(pArray[x]).text();
+	}
+	var text = textArray.join(" ");
+	console.log(text);
 	tfidf.addDocument(text);
-	if(tfidf.tfidf(concatenatedTrends, tfidfCounter) > 1) {
-		$(elt).remove();
+	for(j = 0; j < blacklist.length; j++){
+		if(tfidf.tfidf(blacklist[j], tfidfCounter) > .05) {
+			$(elt).remove();
+			break;
+		}
 	}
 	tfidfCounter++;
 }
 
-chrome.runtime.onMessage.addListener(function(msg, sender, response) {
+
+console.log('hi');
+
+chrome.runtime.onMessage.addListener(function(msg, sender) {
     /* First, validate the message's structure */
-    if ((msg.from === 'popup') && (msg.subject === 'ready')) {
-    	async.series([
-    		function (callback) {
-    			chrome.storage.sync.get("concatenatedTrends", function (result) {
-    				concatenatedTrends = result.concatenatedTrends;
-    			});
-    			callback(null, 'failed to retrieve from db');
-    		},
-    		function (callback) {
-    			$(document).ready(function() {
-					var posts = $("[id*='hyperfeed_story_id']");
-					for(i = 0; i < posts.length; i++) {
-						var currentElt = $(posts[i]);
-						filter(currentElt);
-					}
-				});
-				callback(null, 'failed to filter');
-    		}
-    	]);
+    if ((msg.from === 'popup') && (msg.subject === 'filter')) {
+    	console.log('here');
+    	filterFeed();
     }
 });
 
+var filterFeed = function() {
+	async.series([
+		function (callback) {
+			chrome.storage.sync.get("userBlacklist", function (result) {
+				blacklist = result.userBlacklist;
+			});
+			callback(null, 'failed to retrieve from db');
+			console.log(blacklist);
+		},
+		function (callback) {
+			console.log(blacklist);
+			$(document).ready(function() {
+				var posts = $("[id*='hyperfeed_story_id']");
+				for(i = 0; i < posts.length; i++) {
+					var currentElt = $(posts[i]);
+					filter(currentElt);
+				}
+			});
+			callback(null, 'failed to filter');
+		}
+	]);
+};
 
+filterFeed();
 
 
 
@@ -73,8 +93,8 @@ chrome.runtime.onMessage.addListener(function(msg, sender, response) {
 },{"./secrets.js":2,"async":4,"natural":34}],2:[function(require,module,exports){
 module.exports = {
 	twitter: {
-	    "consumerKey": "mGzSwh0fSbPx0lGLlo7i48gjf",
-	    "consumerSecret": "8zxb9uOKdfiKihxJTPJpQ0IRTLCo5Pb90u54gszXlruaJbC1BM",
+	    "consumerKey": "wGPwHGkODhE818SyJOzk2pqLY",
+	    "consumerSecret": "aBEPA0rIDuJoESEXLEQTczi0Zt7Li13XiYILvR1idHfQbb2nMo",
 	    "accessToken": "2837808563-l0ExUN9ZVm6yxTHiNSUO3YeBsxgWyY2v4FZeUoE",
 	    "accessTokenSecret": "DIr7CyN8JeKYtEFmKlQzU2mTqNBCWKdrSRbVaZBJBCREm"
 	    // "callBackUrl": "XXX"

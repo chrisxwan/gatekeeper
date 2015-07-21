@@ -73,12 +73,13 @@ $(function() {
 		chrome.storage.sync.get("userBlacklist", function (result) {
 			console.log('hi');
 			var userList = result.userBlacklist === undefined ? [] : result.userBlacklist;
+			console.log(userList);
 			if(userList.length === 0) {
 				var htmlString = '<div class="row-fluid blocked-keyword"><div class="col-xs-14 center">No blocked keywords. Add a new one!</div></div>';
 				$('#user-blacklist').append(htmlString);
 			} else {
 				for(i = 0; i < userList.length; i++) {
-					var htmlString = '<div class="row-fluid blocked-keyword" id="shift-right"><div class="col-xs-5">' + userList[i] + '</div><div class="col-xs-3"><button class="btn btn-xs" id="delete">Delete</button></div></div>';
+					var htmlString = '<div class="row-fluid blocked-keyword" id="shift-right"><div class="col-xs-7">' + userList[i] + '</div><div class="col-xs-3"><button class="btn btn-xs" id="delete">Delete</button></div></div>';
 					$('#user-blacklist').append(htmlString);
 				}
 			}

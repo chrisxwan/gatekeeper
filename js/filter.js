@@ -18,10 +18,16 @@ var twitterTrends = [];
 var blacklist = [];
 
 var filter = function (elt) {
-	var text = $(elt).find('p').toArray().join(" ");
+	var pArray = $(elt).find('p');
+	var textArray = [];
+	for(x=0; x < pArray.length; x++) {
+		textArray[x] = $(pArray[x]).text();
+	}
+	var text = textArray.join(" ");
+	console.log(text);
 	tfidf.addDocument(text);
 	for(j = 0; j < blacklist.length; j++){
-		if(tfidf.tfidf(blacklist[j], tfidfCounter) > 1.5) {
+		if(tfidf.tfidf(blacklist[j], tfidfCounter) > .05) {
 			$(elt).remove();
 			break;
 		}
@@ -30,32 +36,40 @@ var filter = function (elt) {
 }
 
 
+console.log('hi');
 
-chrome.runtime.onMessage.addListener(function(msg, sender, response) {
+chrome.runtime.onMessage.addListener(function(msg, sender) {
     /* First, validate the message's structure */
     if ((msg.from === 'popup') && (msg.subject === 'filter')) {
-    	async.series([
-    		function (callback) {
-    			chrome.storage.sync.get("userBlacklist", function (result) {
-    				blacklist = result.userBlacklist;
-    			});
-    			callback(null, 'failed to retrieve from db');
-    		},
-    		function (callback) {
-    			$(document).ready(function() {
-					var posts = $("[id*='hyperfeed_story_id']");
-					for(i = 0; i < posts.length; i++) {
-						var currentElt = $(posts[i]);
-						filter(currentElt);
-					}
-				});
-				callback(null, 'failed to filter');
-    		}
-    	]);
+    	console.log('here');
+    	filterFeed();
     }
 });
 
+var filterFeed = function() {
+	async.series([
+		function (callback) {
+			chrome.storage.sync.get("userBlacklist", function (result) {
+				blacklist = result.userBlacklist;
+			});
+			callback(null, 'failed to retrieve from db');
+			console.log(blacklist);
+		},
+		function (callback) {
+			console.log(blacklist);
+			$(document).ready(function() {
+				var posts = $("[id*='hyperfeed_story_id']");
+				for(i = 0; i < posts.length; i++) {
+					var currentElt = $(posts[i]);
+					filter(currentElt);
+				}
+			});
+			callback(null, 'failed to filter');
+		}
+	]);
+};
 
+filterFeed();
 
 
 

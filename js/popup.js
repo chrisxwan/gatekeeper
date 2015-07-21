@@ -17,17 +17,7 @@ var newTimestamp = false;
 var twitterTrends = [];
 var concatenatedTrends = "";
 
-var communicateReady = function() {
-	chrome.tabs.query({
-        active: true,
-        currentWindow: true
-    }, function(tabs) {
-        /* ...and send a request for the DOM info... */
-        chrome.tabs.sendMessage(
-                tabs[0].id,
-                {from: 'popup', subject: 'ready'});
-    });
-}
+
 
 var getTrends = function() {
 	cb.__call(
@@ -97,4 +87,4 @@ $('form').submit(function (event) {
 			});
 		}
 	});
-})
+});
