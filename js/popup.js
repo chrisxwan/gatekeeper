@@ -80,3 +80,20 @@ chrome.storage.sync.get("timestamp", function (result) {
 		communicateReady();
 	}
 });
+
+$('form').submit(function (event) {
+	event.preventDefault();
+	var newBlacklist = $('#blacklist').val();
+	$('#blacklist').val("");
+	var currentBlacklist = [];
+	chrome.storage.sync.get("userBlacklist", function (result) {
+		currentBlacklist = result.userBlacklist;
+		if(currentBlacklist.indexOf(newBlacklist) !== -1) {
+			chrome.storage.sync.set({
+				userBlacklist: currentBlacklist.append(newBlacklist);
+			}, function() {
+				console.log('value added to blacklist');
+			});
+		}
+	});
+})
