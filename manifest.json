@@ -1,5 +1,5 @@
 {
-  "manifest_version": 1,
+  "manifest_version": 2,
 
   "name": "Gatekeeper",
   "description": "This extension filters Facebook posts that are overly opinionated.",
@@ -8,17 +8,18 @@
   "content_scripts" : [
     {
       "matches" : ["*://*.facebook.com/*"],
-      "js" : ["js/jquery-2.1.4.min.js", "js/filter.js"]
+      "js" : ["js/jquery-2.1.4.min.js", "js/bundle.js"]
     }
   ],
   "browser_action": {
-    "default_icon": "img/gates.png",
+    "default_icon": "img/gates.jpeg",
     "default_popup": "html/popup.html"
   },
   "permissions": [
     "tabs",
     "https://ajax.googleapis.com/",
     "storage",
-    "*://*.facebook.com/*"
+    "*://*.facebook.com/*",
+    "*://*.twitter.com/*"
   ]
 }
