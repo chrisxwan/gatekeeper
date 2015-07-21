@@ -15,23 +15,29 @@ var success = function (data) {
 var tfidfCounter = 0;
 var concatenatedTrends = "";
 var twitterTrends = [];
+var blacklist = [];
 
 var filter = function (elt) {
 	var text = $(elt).find('p').toArray().join(" ");
 	tfidf.addDocument(text);
-	if(tfidf.tfidf(concatenatedTrends, tfidfCounter) > 1) {
-		$(elt).remove();
+	for(j = 0; j < blacklist.length; j++){
+		if(tfidf.tfidf(blacklist[j], tfidfCounter) > 1.5) {
+			$(elt).remove();
+			break;
+		}
 	}
 	tfidfCounter++;
 }
 
+
+
 chrome.runtime.onMessage.addListener(function(msg, sender, response) {
     /* First, validate the message's structure */
-    if ((msg.from === 'popup') && (msg.subject === 'ready')) {
+    if ((msg.from === 'popup') && (msg.subject === 'filter')) {
     	async.series([
     		function (callback) {
-    			chrome.storage.sync.get("concatenatedTrends", function (result) {
-    				concatenatedTrends = result.concatenatedTrends;
+    			chrome.storage.sync.get("userBlacklist", function (result) {
+    				blacklist = result.userBlacklist;
     			});
     			callback(null, 'failed to retrieve from db');
     		},

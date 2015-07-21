@@ -82,6 +82,7 @@ chrome.storage.sync.get("timestamp", function (result) {
 });
 
 $('form').submit(function (event) {
+	console.log('hi');
 	event.preventDefault();
 	var newBlacklist = $('#blacklist').val();
 	$('#blacklist').val("");

@@ -51,6 +51,11 @@ button:focus {
 .green {
 	background-color: #6CE54E;
 }
+
+#shift-right{
+	margin-left: 50px;
+}
+
 .padding {
 	height: 10px;
 }
