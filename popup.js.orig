@@ -11,7 +11,7 @@ $(function() {
 				$('#user-blacklist').append(htmlString);
 			} else {
 				for(i = 0; i < userList.length; i++) {
-					var htmlString = '<div class="row-fluid blocked-keyword" id="shift-right"><div class="col-xs-7">' + userList[i] + '</div><div class="col-xs-3"><button class="btn btn-xs gray" id="delete">Delete</button></div></div>';
+					var htmlString = '<div class="row-fluid blocked-keyword" id="shift-right"><div class="col-xs-5">' + userList[i] + '</div><div class="col-xs-3"><button class="btn btn-xs" id="delete">Delete</button></div></div>';
 					$('#user-blacklist').append(htmlString);
 				}
 			}
@@ -31,6 +31,10 @@ $(function() {
 			else hashtags[hashtag] = false;
 			$(this).toggleClass('selected');
 			$(this).blur();
+		// $("button").click(function() {
+		// 	console.log($(this).text());
+		// 	$(this).blur();
+		// });
 		$("body").on('click', '#delete', function() {
 			console.log('clicked');
 			del($(this));
@@ -86,6 +90,25 @@ $(function() {
 	};
 
 
+<<<<<<< HEAD
+	var populateUserList = function() {
+		chrome.storage.sync.get("userBlacklist", function (result) {
+			console.log('hi');
+			var userList = result.userBlacklist === undefined ? [] : result.userBlacklist;
+			console.log(userList);
+			if(userList.length === 0) {
+				var htmlString = '<div class="row-fluid blocked-keyword"><div class="col-xs-14 center">No blocked keywords. Add a new one!</div></div>';
+				$('#user-blacklist').append(htmlString);
+			} else {
+				for(i = 0; i < userList.length; i++) {
+					var htmlString = '<div class="row-fluid blocked-keyword" id="shift-right"><div class="col-xs-7">' + userList[i] + '</div><div class="col-xs-3"><button class="btn btn-xs" id="delete">Delete</button></div></div>';
+					$('#user-blacklist').append(htmlString);
+				}
+			}
+		});
+	}
+=======
+>>>>>>> 50dc61836905699aa792658f9b8ee0b81ce870b5
 
 	chrome.storage.onChanged.addListener(function(changes, namespace) {
 		if(changes.userBlacklist) {

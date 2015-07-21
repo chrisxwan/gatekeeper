@@ -26,14 +26,22 @@
 	<div class="padding"></div>
 	<div class="container-fluid">
 			<h4 class="container-fluid center">block by keyword</h4>
+<<<<<<< HEAD
 		<div class="row-fluid adjust-padding">
 				<div class="col-xs-9">
 				<input type="text" class="form-control text-input"></button>
 			</div>
 		</div>
+=======
+		<form class="row-fluid" role="form">
+			<div class="col-xs-9">
+				<input type="text" id="blacklist" class="form-control text-input"></button>
+			</div>
+		</form>
 	</div>
 	<div class="container-fluid" id= "user-blacklist">
 		<h4 class="container-fluid center">blocked keywords</h4>
+>>>>>>> ed72f9dcaf80da32884b2e566acc597e9761a76e
 	</div>
 	<div class="padding"></div>
 	<div class="container-fluid"> 

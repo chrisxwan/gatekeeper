@@ -1,7 +1,7 @@
 body {
 	position: relative;
 	width: 320px;
-	height: 470px;
+	height: 400px;
 	background-color: #F5F5F5;
 }
 button {
@@ -51,15 +51,14 @@ button:focus {
 .green {
 	background-color: #6CE54E;
 }
-
-.gray {
-	background-color: #7A7A7A;
-}
+<<<<<<< HEAD
+=======
 
 #shift-right{
-	margin-left: 30px;
+	margin-left: 50px;
 }
 
+>>>>>>> ed72f9dcaf80da32884b2e566acc597e9761a76e
 .padding {
 	height: 10px;
 }
