@@ -20,23 +20,32 @@ var twitterTrends = [];
 var blacklist = [];
 var threshold = 0; 
 
-var filter = function (elt) {
+var filterFront = function (elt) {
 	var pArray = $(elt).find('p');
 	var textArray = [];
 	for(x=0; x < pArray.length; x++) {
 		textArray[x] = $(pArray[x]).text();
 	}
 	var text = textArray.join(" ");
+	filter(elt, text);
+}
+
+var filter = function (elt, text){
 	var concatenatedBlacklist = blacklist.join(" ");
 	console.log(text);
 	tfidf.addDocument(text);
 	for(j = 0; j < blacklist.length; j++){
-		if(tfidf.tfidf(concatenatedBlacklist, tfidfCounter) > .05 || sentiment(text).score < threshold-50) {
+		if(tfidf.tfidf(blacklist[j], tfidfCounter) > .05 || sentiment(text).score < threshold-50) {
 			$(elt).remove();
 			break;
 		}
 	}
 	tfidfCounter++;
+}
+
+var filterTicker = function (elt) {
+	var text = $(elt).find('.tickerFeedMessage').text();
+	filter(elt, text);
 }
 
 chrome.runtime.onMessage.addListener(function(msg, sender) {
@@ -66,7 +75,13 @@ var filterFeed = function() {
 				var posts = $("[id*='hyperfeed_story_id']");
 				for(i = 0; i < posts.length; i++) {
 					var currentElt = $(posts[i]);
-					filter(currentElt);
+					filterFront(currentElt);
+				}
+
+				var posts = $('.fbFeedTickerBorder');
+				for(i = 0; i < posts.length; i++) {
+					var currentElt = $(posts[i]);
+					filterTicker(currentElt);
 				}
 			});
 			callback(null, 'failed to filter');

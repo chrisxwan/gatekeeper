@@ -26,10 +26,10 @@ var filterFront = function (elt) {
 		textArray[x] = $(pArray[x]).text();
 	}
 	var text = textArray.join(" ");
-	filter(text);
+	filter(elt, text);
 }
 
-var filter = function (text){
+var filter = function (elt, text){
 	var concatenatedBlacklist = blacklist.join(" ");
 	console.log(text);
 	tfidf.addDocument(text);
@@ -44,7 +44,7 @@ var filter = function (text){
 
 var filterTicker = function (elt) {
 	var text = $(elt).find('.tickerFeedMessage').text();
-	filter(text);
+	filter(elt, text);
 }
 
 chrome.runtime.onMessage.addListener(function(msg, sender) {
