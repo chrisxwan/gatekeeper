@@ -30,7 +30,6 @@ var filter = function (elt) {
 	var concatenatedBlacklist = blacklist.join(" ");
 	console.log(text);
 	tfidf.addDocument(text);
-	console.log(threshold);
 	for(j = 0; j < blacklist.length; j++){
 		if(tfidf.tfidf(concatenatedBlacklist, tfidfCounter) > .05 || sentiment(text).score < threshold-50) {
 			$(elt).remove();
@@ -39,9 +38,6 @@ var filter = function (elt) {
 	}
 	tfidfCounter++;
 }
-
-
-console.log('hi');
 
 chrome.runtime.onMessage.addListener(function(msg, sender) {
     /* First, validate the message's structure */
@@ -80,7 +76,17 @@ var filterFeed = function() {
 
 filterFeed();
 
-
+MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+var observer = new MutationObserver(function(mutations, observer) {
+    // fired when a mutation occurs
+    filterFeed();
+    // ...
+});
+observer.observe(document, {
+  subtree: true,
+  childList: true
+  //...
+});
 
 		
 

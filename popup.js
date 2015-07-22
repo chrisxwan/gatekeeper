@@ -1,10 +1,22 @@
+var communicateReady = function() {
+	console.log('sending message');
+	chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, function(tabs) {
+        /* ...and send a request for the DOM info... */
+        chrome.tabs.sendMessage(
+                tabs[0].id,
+                {from: 'popup', subject: 'filter'});
+    });
+};
+
 $(function() {
 	var hashtags = {}; //add trending hashtags from twitter
 	var keywords = []; //add user input keywords
 	$(document).ready(function() {
 		var populateUserList = function() {
 			chrome.storage.sync.get("userBlacklist", function (result) {
-				console.log('hi');
 				var userList = result.userBlacklist === undefined ? [] : result.userBlacklist;
 				if(userList.length === 0) {
 					var htmlString = '<div class="row-fluid blocked-keyword"><div class="col-xs-14 center">No blocked keywords. Add a new one!</div></div>';
@@ -92,18 +104,6 @@ $(function() {
 			3: "#2BDDE4"
 		};
 
-		var communicateReady = function() {
-			chrome.tabs.query({
-		        active: true,
-		        currentWindow: true
-		    }, function(tabs) {
-		        /* ...and send a request for the DOM info... */
-		        chrome.tabs.sendMessage(
-		                tabs[0].id,
-		                {from: 'popup', subject: 'filter'});
-		    });
-		};
-
 		var del = function(elem) {
 			var blockedString = $(elem).parent().siblings().text();
 			console.log(blockedString);
@@ -148,4 +148,8 @@ $(function() {
 			});
 		};
 	});
+	$(document).ajaxComplete(function() {
+		communicateReady();
+		console.log('hi');
+	})
 });

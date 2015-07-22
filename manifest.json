@@ -4,7 +4,6 @@
   "name": "Gatekeeper",
   "description": "This extension filters Facebook posts that are overly opinionated.",
   "version": "1.0",
-
   "content_scripts" : [
     {
       "matches" : ["*://*.facebook.com/*"],

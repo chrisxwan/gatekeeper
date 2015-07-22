@@ -38,9 +38,6 @@ var filter = function (elt) {
 	tfidfCounter++;
 }
 
-
-console.log('hi');
-
 chrome.runtime.onMessage.addListener(function(msg, sender) {
     /* First, validate the message's structure */
     if ((msg.from === 'popup') && (msg.subject === 'filter')) {
@@ -78,7 +75,17 @@ var filterFeed = function() {
 
 filterFeed();
 
-
+MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+var observer = new MutationObserver(function(mutations, observer) {
+    // fired when a mutation occurs
+    filterFeed();
+    // ...
+});
+observer.observe(document, {
+  subtree: true,
+  childList: true
+  //...
+});
 
 		
 
