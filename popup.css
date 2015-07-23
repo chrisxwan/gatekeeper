@@ -33,24 +33,37 @@ button:focus {
 	font-family: "Helvetica", "Arial", sans-serif;
 	text-align: center;
 }
-.orange {
-	background-color: #FFC30F;
-}
 .red-orange {
 	background-color: #FF794D;
 }
-.purple {
-	background-color: #794DFF;
-}
-.violet {
-	background-color: #4D79FF;
-}
-.blue {
-	background-color: #2BDDE4;
+.orange {
+	background-color: #FFC30F;
 }
 .green {
 	background-color: #6CE54E;
 }
+.lime {
+	background-color: #D1F2A5;
+}
+.honey {
+	background-color: #EFFAB4;
+}
+.sherbert {
+	background-color: #FFC48C;
+}
+.grapefruit {
+	background-color: #FF9F80;
+}
+.watermelon {
+	background-color: #F56991;
+}
+.blue {
+	background-color: #2BDDE4;
+}
+.purple {
+	background-color: #794DFF;
+}
+
 
 .gray {
 	background-color: #7A7A7A;

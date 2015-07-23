@@ -2,6 +2,7 @@ var natural = require('natural');
 var secrets = require('./secrets.js');
 var async = require('async');
 var sentiment = require('sentiment');
+var request = require('request');
 var TfIdf = natural.TfIdf;
 var tfidf = new TfIdf();
 
@@ -30,11 +31,11 @@ var filterFront = function (elt) {
 }
 
 var filter = function (elt, text){
-	var concatenatedBlacklist = blacklist.join(" ");
-	console.log(text);
+	var list = blacklist.concat(twitterTrends);
+	var concatenatedBlacklist = list.join(" ");
 	tfidf.addDocument(text);
-	for(j = 0; j < blacklist.length; j++){
-		if(tfidf.tfidf(blacklist[j], tfidfCounter) > .05 || sentiment(text).score < threshold-50) {
+	for(j = 0; j < list.length; j++){
+		if(tfidf.tfidf(list[j], tfidfCounter) > .05 || sentiment(text).score < threshold-50) {
 			$(elt).remove();
 			break;
 		}
@@ -64,11 +65,8 @@ var filterFeed = function() {
 			chrome.storage.sync.get("threshold", function (result) {
 				threshold = result.threshold;
 			});
-			console.log(blacklist);
-			console.log(threshold);
 		},
 		function (callback) {
-			console.log(blacklist);
 			$(document).ready(function() {
 				var posts = $("[id*='hyperfeed_story_id']");
 				for(i = 0; i < posts.length; i++) {
@@ -87,8 +85,6 @@ var filterFeed = function() {
 	]);
 };
 
-filterFeed();
-
 MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 var observer = new MutationObserver(function(mutations, observer) {
     // fired when a mutation occurs
@@ -99,6 +95,18 @@ observer.observe(document, {
   subtree: true,
   childList: true
   //...
+});
+
+chrome.runtime.sendMessage({
+	message: 'twitter'
+}, function(responseText) {
+    var raw = JSON.parse(responseText)[0]["trends"];
+	for(x=0; x<raw.length; x++) {
+		twitterTrends.push(raw[x].name);
+		console.log(raw[x].name);
+	}
+	filterFeed();
+
 });
 
 		

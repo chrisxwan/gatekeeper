@@ -2,7 +2,7 @@
   "name": "gatekeeper",
   "version": "1.0.0",
   "description": "Block Facebook shitpost",
-  "main": "./js/content.js",
+  "main": "./js/filter.js",
   "dependencies": {
     "WNdb": "^3.1.1",
     "async": "^1.4.0",
