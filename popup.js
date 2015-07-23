@@ -148,8 +148,4 @@ $(function() {
 			});
 		};
 	});
-	$(document).ajaxComplete(function() {
-		communicateReady();
-		console.log('hi');
-	})
 });
