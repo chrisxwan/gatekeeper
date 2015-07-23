@@ -1,18 +1,8 @@
 var natural = require('natural');
-var secrets = require('./secrets.js');
 var async = require('async');
 var sentiment = require('sentiment');
-var request = require('request');
 var TfIdf = natural.TfIdf;
 var tfidf = new TfIdf();
-
-
- var error = function (err, response, body) {
-    console.log('ERROR [%s]', err);
-};
-var success = function (data) {
-    console.log('Data [%s]', data);
-};
 
 var tfidfCounter = 0;
 var concatenatedTrends = "";
@@ -20,6 +10,8 @@ var twitterTrends = [];
 var blacklist = [];
 var threshold = 0; 
 
+
+/* Filter the front page posts */
 var filterFront = function (elt) {
 	var pArray = $(elt).find('p');
 	var textArray = [];
@@ -30,6 +22,9 @@ var filterFront = function (elt) {
 	filter(elt, text);
 }
 
+/* Given the HTML DOM element and the text to filter,
+ * run it through the NLP API and the Sentiment Analysis API 
+ * to determine whether it should be hidden */
 var filter = function (elt, text){
 	var list = blacklist.concat(twitterTrends);
 	var concatenatedBlacklist = list.join(" ");
@@ -43,11 +38,15 @@ var filter = function (elt, text){
 	tfidfCounter++;
 }
 
+
+/* Filter the ticker sidebar */
 var filterTicker = function (elt) {
 	var text = $(elt).find('.tickerFeedMessage').text();
 	filter(elt, text);
 }
 
+/* Listen for if the user added something in preferences.
+ * If so, filter the feed to account for those changes */
 chrome.runtime.onMessage.addListener(function(msg, sender) {
     /* First, validate the message's structure */
     if ((msg.from === 'popup') && (msg.subject === 'filter')) {
@@ -55,8 +54,12 @@ chrome.runtime.onMessage.addListener(function(msg, sender) {
     }
 });
 
+
+/* All-purpose function to filter the front page of Facebook */
 var filterFeed = function() {
 	async.series([
+		/* Use this first function to make sure we grab the necessary
+		 * items from the database before doing anything else */
 		function (callback) {
 			chrome.storage.sync.get("userBlacklist", function (result) {
 				blacklist = result.userBlacklist;
@@ -68,13 +71,13 @@ var filterFeed = function() {
 		},
 		function (callback) {
 			$(document).ready(function() {
-				var posts = $("[id*='hyperfeed_story_id']");
+				var posts = $("[id*='hyperfeed_story_id']"); //snipe posts on front page
 				for(i = 0; i < posts.length; i++) {
 					var currentElt = $(posts[i]);
 					filterFront(currentElt);
 				}
 
-				var posts = $('.fbFeedTickerBorder');
+				var posts = $('.fbFeedTickerBorder'); //snipe posts on ticker
 				for(i = 0; i < posts.length; i++) {
 					var currentElt = $(posts[i]);
 					filterTicker(currentElt);
@@ -85,18 +88,37 @@ var filterFeed = function() {
 	]);
 };
 
+/* Every single time the DOM changes, filter the feed.
+ * This is problematic, though, because it hampers normal
+ * Facebook performance since the DOM changes so many times.
+ * This hack is mainly used to detect AJAX load and infinite scroll.
+ */
 MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 var observer = new MutationObserver(function(mutations, observer) {
     // fired when a mutation occurs
     filterFeed();
-    // ...
 });
 observer.observe(document, {
   subtree: true,
   childList: true
-  //...
 });
 
+/* On the other hand, here, I can snipe the HTML element of the front page
+ * of the Facebook feed and detect for changes here. Theoretically, this would
+ * improve performance, but perhaps only marginally. The reason I don't include this
+ * is because I want to detect for changes in the ticker sidebar as well.
+
+
+observer.observe(document.getElementById('contentCol'), {
+  subtree: true,
+  childList: true
+});
+
+*/ 
+
+
+
+/* Tell background.js to get the Twitter trends */
 chrome.runtime.sendMessage({
 	message: 'twitter'
 }, function(responseText) {

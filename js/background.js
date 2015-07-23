@@ -1,3 +1,5 @@
+
+/* Get that dank Twitter */
 chrome.runtime.onMessage.addListener(function(request, sender, callback) {
     if (request.message == "twitter") {
         var xhttp = new XMLHttpRequest();

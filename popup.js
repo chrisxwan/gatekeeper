@@ -1,4 +1,4 @@
-
+/* Tell filter.js to do its job */
 var communicateReady = function() {
 	console.log('sending message');
 	chrome.tabs.query({
@@ -16,6 +16,7 @@ $(function() {
 	var hashtags = {}; //add trending hashtags from twitter
 	var keywords = []; //add user input keywords
 	$(document).ready(function() {
+		/* Get the Twitter trends */
 		chrome.runtime.sendMessage({
 			message: 'twitter'
 		}, function(responseText) {
@@ -31,6 +32,7 @@ $(function() {
 			}
 		});
 
+		/* Populate the user blacklists in the UI */
 		var populateUserList = function() {
 			chrome.storage.sync.get("userBlacklist", function (result) {
 				var userList = result.userBlacklist === undefined ? [] : result.userBlacklist;
@@ -46,6 +48,8 @@ $(function() {
 			});
 		};
 		populateUserList();
+
+		/* Submit new blacklist */
 		$(".text-input").keydown(function(event) {
 			if (event.keyCode == 13) {
 				//this.form.submit();
@@ -54,11 +58,13 @@ $(function() {
 			}
 		});
 
+		/* Delete blacklist in UI */
 		$("body").on('click', '#delete', function() {
 			console.log('clicked');
 			del($(this));
 		});
 
+		/* TODO */ 
 		$("button").click(function() {
 			var hashtag = $(this).text();
 			if (!$(this).hasClass('selected')) hashtags[hashtag] = true;
@@ -67,6 +73,8 @@ $(function() {
 			$(this).blur();
 		});
 
+
+		/* Settings for dial bar */
 		var dialColor = '#00CCCC';
 		var threshold;
 
@@ -105,13 +113,8 @@ $(function() {
 			}
 		});
 
-		var colors = {
-			0: "#FFC30F",
-			1: "#FF794D",
-			2: "#794DFF",
-			3: "#2BDDE4"
-		};
 
+		/* Delete from the user blacklist */
 		var del = function(elem) {
 			var blockedString = $(elem).parent().siblings().text();
 			console.log(blockedString);
@@ -128,7 +131,7 @@ $(function() {
 		};
 
 
-
+		/* If the user blacklist was updated, then we need to update the UI as wel */
 		chrome.storage.onChanged.addListener(function(changes, namespace) {
 			if(changes.userBlacklist) {
 				$('.blocked-keyword').remove();
@@ -136,6 +139,7 @@ $(function() {
 			}
 		});
 
+		/* Add to user blacklist, then tell filter.js to filter again */
 		var submit = function(elem) {
 			var val = $(elem).val();
 			keywords.push(val);
