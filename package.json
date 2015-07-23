@@ -1,0 +1,35 @@
+{
+  "name": "gatekeeper",
+  "version": "1.0.0",
+  "description": "Block Facebook shitpost",
+  "main": "./js/content.js",
+  "dependencies": {
+    "WNdb": "^3.1.1",
+    "async": "^1.4.0",
+    "codebird": "^2.6.0",
+    "jquery": "^2.1.4",
+    "lapack": "^0.1.0",
+    "natural": "^0.2.1",
+    "oauth": "^0.9.13",
+    "oauth-1.0a": "^0.2.1",
+    "request": "^2.58.0",
+    "sentiment": "^1.0.2",
+    "twitter-node-client": "^0.0.6",
+    "xhr2": "^0.1.2",
+    "xmlhttprequest": "^1.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrisxwan/gatekeeper.git"
+  },
+  "author": "Chris Wan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chrisxwan/gatekeeper/issues"
+  },
+  "homepage": "https://github.com/chrisxwan/gatekeeper#readme"
+}
