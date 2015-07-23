@@ -1,5 +1,4 @@
 var Twitter = require('twitter-node-client').Twitter;
-var secrets = require('./secrets.js');
 var fs = require('fs');
 
 
@@ -10,7 +9,14 @@ var success = function (data) {
     console.log('Data [%s]', data);
 };
 
-var twitter = new Twitter(secrets.twitter);
+var config = {
+	"consumerKey": process.env.consumerKey,
+	"consumerSecret": process.env.consumerSecret,
+	"accessToken": process.env.accessToken,
+	"accessTokenSecret": process.env.accessTokenSecret
+};
+
+var twitter = new Twitter(config);
 
 twitter.getCustomApiCall('/trends/place.json', { id: 23424977, exclude: 'hashtags' }, error, function (data) {
 	var trendsRaw = JSON.parse(data);
