@@ -106,7 +106,6 @@ chrome.runtime.sendMessage({
 		console.log(raw[x].name);
 	}
 	filterFeed();
-
 });
 
 		

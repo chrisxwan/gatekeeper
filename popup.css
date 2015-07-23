@@ -33,36 +33,38 @@ button:focus {
 	font-family: "Helvetica", "Arial", sans-serif;
 	text-align: center;
 }
-.red-orange {
-	background-color: #FF794D;
+.palette-1 {
+	background-color: #465C98;
 }
-.orange {
-	background-color: #FFC30F;
+.palette-2 {
+	background-color: #ABCBF4;
 }
-.green {
-	background-color: #6CE54E;
+.palette-3 {
+	background-color: #2E232B;
 }
-.lime {
-	background-color: #D1F2A5;
+.palette-4 {
+	background-color: #72A0C4;
 }
-.honey {
-	background-color: #EFFAB4;
+.palette-5 {
+	background-color: #32356C;
 }
-.sherbert {
-	background-color: #FFC48C;
+.palette-6 {
+	background-color: #145369;
 }
-.grapefruit {
-	background-color: #FF9F80;
+.palette-7 {
+	background-color: #9DB8DE;
 }
-.watermelon {
-	background-color: #F56991;
+.palette-8 {
+	background-color: #6196C1;
 }
-.blue {
-	background-color: #2BDDE4;
+.palette-9 {
+	background-color: #3E485F;
 }
-.purple {
-	background-color: #794DFF;
+.palette-10 {
+	background-color: #151647;
 }
+
+
 
 
 .gray {
@@ -91,4 +93,14 @@ button:focus {
 	float: none !important;
 	padding-right: 25px !important;
 	/*padding-left: -20px !important;*/
+}
+
+.blocked-keyword {
+	width: 275px !important;
+	height: 30px !important;
+}
+
+.trend {
+	width: 130px !important;
+	margin-top: 3px !important;
 }

@@ -16,16 +16,20 @@ $(function() {
 	var hashtags = {}; //add trending hashtags from twitter
 	var keywords = []; //add user input keywords
 	$(document).ready(function() {
-		var colors = ['red-orange','orange','green','lime','honey','sherbert','grapefruit','watermelon','blue','purple'];
-		// request("http://906a26ef48081c60b08f-58945f604110abde655fc3bf34312b67.r15.cf5.rackcdn.com/trends.json",
-		// 	function(error, response, body) {
-		// 		var raw = JSON.parse(body)[0]["trends"];
-		// 		for(x=0; x<raw.length; x++) {
-		// 			var trend = raw[x].name;
-		// 			var htmlString = '<div class="col-xs-3"><button type="submit" class="btn btn-xs"' + colors[x] + '>' + trend + '</button></div>';
-		// 			$('#hashtags').append(htmlString);
-		// 		}
-		// });
+		chrome.runtime.sendMessage({
+			message: 'twitter'
+		}, function(responseText) {
+		    var raw = JSON.parse(responseText)[0]["trends"];
+		    var colors = ['palette-1', 'palette-2', 'palette-3', 'palette-4', 'palette-5', 'palette-6', 'palette-7', 'palette-8', 'palette-9', 'palette-10'];
+			for(x=0; x<raw.length; x++) {
+				var trend = raw[x].name;
+				var c = "btn btn-xs " + colors[x];
+				console.log(c);
+				var htmlString = '<div class="col-xs-6"><button type="submit" class="btn btn-xs trend ' + colors[x] + '">' + trend + '</button></div>';
+				$('#hashtags').append(htmlString);
+				console.log(htmlString);
+			}
+		});
 
 		var populateUserList = function() {
 			chrome.storage.sync.get("userBlacklist", function (result) {
