@@ -22,5 +22,7 @@ test:
 deployment:
   production:
     branch: master
-    commands:
+    commands: 
+	  - git config --global user.email "christopher.wan@yale.edu"
+	  - git config --global user.name "chrisxwan"
       - cd $HOME/$CIRCLE_PROJECT_REPONAME && git add . && git commit -m "Updating" && git push origin master
