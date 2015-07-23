@@ -1,0 +1,26 @@
+general:
+  branches:
+    only:
+      - master
+
+machine:
+  timezone:
+    America/Los_Angeles
+  node:
+    version: 
+      0.12.4
+
+dependencies:
+  post:
+    - cd $HOME/$CIRCLE_PROJECT_REPONAME && npm install
+    - cd $HOME/$CIRCLE_PROJECT_REPONAME/js && node twitter.js
+
+test:
+  override:
+    - echo "No tests are needed"
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - cd $HOME/$CIRCLE_PROJECT_REPONAME && git add . && git commit -m "Updating" && git push origin master
