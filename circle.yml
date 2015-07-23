@@ -23,6 +23,4 @@ deployment:
   production:
     branch: master
     commands: 
-      - git config --global user.email "christopher.wan@yale.edu"
-      - git config --global user.name "chrisxwan"
-      - cd $HOME/$CIRCLE_PROJECT_REPONAME && git add . && git commit -m "Updating" && git push origin master
+      - turbolift -u $RAXUSER -a $RAXAPIKEY --os-rax-auth $RAXREGION upload -s $HOME/$CIRCLE_PROJECT_REPONAME/trends.json -c $STAGECONTAINER;
