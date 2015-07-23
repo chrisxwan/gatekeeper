@@ -70,48 +70,40 @@ $(function() {
 		var dialColor = '#00CCCC';
 		var threshold;
 
-		async.series([
-			function (callback) {
-				chrome.storage.sync.get("threshold", function (result) {
-					if(result.threshold === undefined) {
-						chrome.storage.sync.set({
-							threshold: 0
-						}, function() {
-							console.log(threshold);
-						});
-						threshold = 0;
-					} else {
-						threshold = result.threshold;
-					}
+		chrome.storage.sync.get("threshold", function (result) {
+			if(result.threshold === undefined) {
+				chrome.storage.sync.set({
+					threshold: 0
+				}, function() {
+					console.log(threshold);
 				});
-				callback(null, 'failed to grab threshold');
-			}, 
-			function (callback) {
+				threshold = 0;
 				$('.dial').val(threshold).trigger('change');
-
-				$(".dial").knob({
-					'min': 0,
-					'max': 100,
-					'width': 180,
-					'height': 180,
-					'float': 'left',
-					'fgColor': dialColor,
-					'dynamicDraw': true,
-					'thickness': 0.5,
-					'tickColorizeValues': true,
-					'displayInput': true,
-					'release': function(v) {
-						chrome.storage.sync.set({
-							threshold: v
-						}, function() {
-							console.log(threshold);
-							communicateReady();
-						});
-					}
-				});
-				callback(null, 'failed to trigger knob');
+			} else {
+				threshold = result.threshold;
+				$('.dial').val(threshold).trigger('change');
 			}
-		]);
+		});
+		$(".dial").knob({
+			'min': 0,
+			'max': 100,
+			'width': 180,
+			'height': 180,
+			'float': 'left',
+			'fgColor': dialColor,
+			'dynamicDraw': true,
+			'thickness': 0.5,
+			'tickColorizeValues': true,
+			'displayInput': true,
+			'release': function(v) {
+				chrome.storage.sync.set({
+					threshold: v
+				}, function() {
+					console.log(threshold);
+					communicateReady();
+				});
+			}
+		});
 
 		var colors = {
 			0: "#FFC30F",
