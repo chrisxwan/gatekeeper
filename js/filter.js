@@ -98,15 +98,18 @@ var observer = new MutationObserver(function(mutations, observer) {
     // fired when a mutation occurs
     filterFeed();
 });
-observer.observe(document, {
-  subtree: true,
-  childList: true
-});
+
+
+// observer.observe(document, {
+//   subtree: true,
+//   childList: true
+// });
 
 /* On the other hand, here, I can snipe the HTML element of the front page
- * of the Facebook feed and detect for changes here. Theoretically, this would
- * improve performance, but perhaps only marginally. The reason I don't include this
- * is because I want to detect for changes in the ticker sidebar as well.
+ * of the Facebook feed and detect for changes here. 
+ * I can also snipe the HTML element of the sidebar ticker to detect for changes.
+ * Theoretically, this would improve performance, but probably only marginally.
+ */
 
 
 observer.observe(document.getElementById('contentCol'), {
@@ -114,7 +117,12 @@ observer.observe(document.getElementById('contentCol'), {
   childList: true
 });
 
-*/ 
+observer.observe(document.getElementById('pagelet_ticker'), {
+	subtree: true,
+	childList: true
+});
+
+
 
 
 

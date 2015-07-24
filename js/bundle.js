@@ -99,10 +99,32 @@ var observer = new MutationObserver(function(mutations, observer) {
     // fired when a mutation occurs
     filterFeed();
 });
+
+
+// observer.observe(document, {
+//   subtree: true,
+//   childList: true
+// });
+
+/* On the other hand, here, I can snipe the HTML element of the front page
+ * of the Facebook feed and detect for changes here. 
+ * I can also snipe the HTML element of the sidebar ticker to detect for changes.
+ * Theoretically, this would improve performance, but probably only marginally.
+ */
+
+
 observer.observe(document.getElementById('contentCol'), {
   subtree: true,
   childList: true
 });
+
+observer.observe(document.getElementById('pagelet_ticker'), {
+	subtree: true,
+	childList: true
+});
+
+
+
 
 
 /* Tell background.js to get the Twitter trends */
@@ -120,9 +142,18 @@ chrome.runtime.sendMessage({
 		
 
 
+/* MUST HAVES */
+/** Step 1. Grab Twitter trending tweets globally (excluding hashtags)
+  * Step 2. Parse the HTML DOM using jQuery. 
+  *         Grab elements with ID substring "hyperfeed_story_id" > Grab p tag > Concatenate
+  * Step 3. Use Natural to evaluate similarities
+  * Step 4. Write background process to detect AJAX load
+  */
 
 /* NICE TO HAVES */
 /** 1. Degree of conservatism.
+  * 2. Permanent storage by manually adding filters.
+  * 3. Display trends in popup.html
   */
 },{"async":3,"natural":33,"sentiment":120}],2:[function(require,module,exports){
 (function (__dirname){
