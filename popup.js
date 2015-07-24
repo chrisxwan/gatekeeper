@@ -17,20 +17,22 @@ $(function() {
 	var keywords = []; //add user input keywords
 	$(document).ready(function() {
 		/* Get the Twitter trends */
-		chrome.runtime.sendMessage({
-			message: 'twitter'
-		}, function(responseText) {
-		    var raw = JSON.parse(responseText)[0]["trends"];
-		    var colors = ['palette-1', 'palette-2', 'palette-3', 'palette-4', 'palette-5', 'palette-6', 'palette-7', 'palette-8', 'palette-9', 'palette-10'];
-			for(x=0; x<raw.length; x++) {
-				var trend = raw[x].name;
-				var c = "btn btn-xs " + colors[x];
-				console.log(c);
-				var htmlString = '<div class="col-xs-6"><button type="submit" class="btn btn-xs trend ' + colors[x] + '">' + trend + '</button></div>';
-				$('#hashtags').append(htmlString);
-				console.log(htmlString);
-			}
-		});
+		setTimeout(function() {
+			chrome.runtime.sendMessage({
+				message: 'twitter'
+			}, function(responseText) {
+			    var raw = JSON.parse(responseText)[0]["trends"];
+			    var colors = ['palette-1', 'palette-2', 'palette-3', 'palette-4', 'palette-5', 'palette-6', 'palette-7', 'palette-8', 'palette-9', 'palette-10'];
+				for(x=0; x<raw.length; x++) {
+					var trend = raw[x].name;
+					var c = "btn btn-xs " + colors[x];
+					console.log(c);
+					var htmlString = '<div class="col-xs-6"><button type="submit" class="btn btn-xs trend ' + colors[x] + '">' + trend + '</button></div>';
+					$('#hashtags').append(htmlString);
+					console.log(htmlString);
+				}
+			});
+		}, 140);
 
 		/* Populate the user blacklists in the UI */
 		var populateUserList = function() {

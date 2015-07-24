@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "Gatekeeper",
-  "description": "This extension filters Facebook posts that are overly opinionated.",
+  "description": "Filter your Facebook front page so you'll only see the things you want to see.",
   "version": "1.0",
   "content_scripts" : [
     {
