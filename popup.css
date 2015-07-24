@@ -104,3 +104,20 @@ button:focus {
 	width: 130px !important;
 	margin-top: 3px !important;
 }
+
+.dial-info {
+	margin-bottom: 4px;
+}
+
+.tiny-box {
+	width: 15px;
+	height: 15px;
+	border-radius: 2px;
+	background-color: #00CCCC;
+	display: inline-block;
+	margin-bottom: -3px;
+}
+
+p {
+	display: inline;
+}

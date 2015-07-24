@@ -13,3 +13,9 @@ So, here's GateKeeper, a Google Chrome extension built to customize your Faceboo
 
 If you have any suggestions or want to contribute to this project, please feel free to add an issue or submit a pull request!
 
+***NOTE:***
+This is not the Chrome extension itself. There are many things in this repository (like the node modules, circle.yml, etc.,) that are not required by the actual extension (technically) but *are* used behind the hood. If you fork and run this in Chrome on developer mode, everything should work the same. The main JS files used are `js/filter.js`, `popup.js`, and `js/background.js`. Any changes to filter.js should be followed by:
+
+```browserify js/filter.js -o js/bundle.js```
+
+Thanks!
