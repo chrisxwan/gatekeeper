@@ -137,7 +137,7 @@ p {
 
 input.cmn-toggle-round + label {
   padding: 2px;
-  width: 40px;
+  width: 35px;
   height: 20px;
   background-color: #dddddd;
   border-radius: 20px;
@@ -168,12 +168,12 @@ input.cmn-toggle-round:checked + label:before {
   background-color: #5AC8FB;
 }
 input.cmn-toggle-round:checked + label:after {
-  margin-left: 20px;
+  margin-left: 15px;
 }
 
 #top-switch {
 	margin-top: -28px; 
 	float: right; 
-	margin-right: 2px;
+	margin-right: 10px;
 }
 
