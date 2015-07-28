@@ -22,17 +22,32 @@ $(function() {
 				message: 'twitter'
 			}, function(responseText) {
 			    var raw = JSON.parse(responseText)[0]["trends"];
-			    var colors = ['palette-1', 'palette-2', 'palette-3', 'palette-4', 'palette-5', 'palette-6', 'palette-7', 'palette-8', 'palette-9', 'palette-10'];
-				for(x=0; x<raw.length; x++) {
-					var trend = raw[x].name;
-					var c = "btn btn-xs " + colors[x];
-					console.log(c);
-					var htmlString = '<div class="col-xs-6"><button type="submit" class="btn btn-xs trend ' + colors[x] + '">' + trend + '</button></div>';
-					$('#hashtags').append(htmlString);
-					console.log(htmlString);
-				}
+			    chrome.storage.sync.get("getTwitter", function (result) {
+			    	var colors = ['gray', 'gray', 'gray', 'gray', 'gray', 'gray', 'gray', 'gray', 'gray', 'gray'];
+			    	if(result.getTwitter === undefined) {
+			    		chrome.storage.sync.set({
+			    			getTwitter: false
+			    		}, function() {
+			    			console.log('twitter initialized to false');
+			    		});
+			    	} else if(result.getTwitter === true) {
+			    		colors = ['palette-1', 'palette-2', 'palette-3', 'palette-4', 'palette-5', 'palette-6', 'palette-7', 'palette-8', 'palette-9', 'palette-10'];	
+			    	}
+			    	for(x=0; x<raw.length; x++) {
+						var trend = raw[x].name;
+						var c = "btn btn-xs " + colors[x];
+						console.log(c);
+						var htmlString = '<div class="col-xs-6"><button type="submit" class="btn btn-xs trend ' + colors[x] + '">' + trend + '</button></div>';
+						$('#hashtags').append(htmlString);
+						console.log(htmlString);
+					}
+			    });
 			});
 		}, 140);
+
+		$('.cmn-toggle-round').click(function() {
+			console.log('clicked');
+		});
 
 		/* Populate the user blacklists in the UI */
 		var populateUserList = function() {
@@ -43,7 +58,7 @@ $(function() {
 					$('#user-blacklist').append(htmlString);
 				} else {
 					for(i = 0; i < userList.length; i++) {
-						var htmlString = '<div class="row-fluid blocked-keyword" id="shift-right"><div class="col-xs-7">' + userList[i] + '</div><div class="col-xs-3"><button class="btn btn-xs gray" id="delete">Delete</button></div></div>';
+						var htmlString = '<div class="row-fluid blocked-keyword" id="shift-right"><div class="col-xs-7">' + userList[i] + '</div><div class="col-xs-3"><button class="btn btn-xs delete-color" id="delete">Delete</button></div></div>';
 						$('#user-blacklist').append(htmlString);
 					}
 				}

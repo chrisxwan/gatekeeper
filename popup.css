@@ -65,7 +65,9 @@ button:focus {
 }
 
 
-
+.delete-color {
+	background-color: #CD0000;
+}
 
 .gray {
 	background-color: #7A7A7A;
