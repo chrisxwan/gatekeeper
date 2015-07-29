@@ -139,7 +139,7 @@ p {
 
 input.cmn-toggle-round + label {
   padding: 2px;
-  width: 30px;
+  width: 28px;
   height: 18px;
   background-color: #dddddd;
   border-radius: 20px;
@@ -157,25 +157,25 @@ input.cmn-toggle-round + label:before {
   right: 1px;
   background-color: #f1f1f1;
   border-radius: 20px;
-  transition: background 0.4s;
+  transition: background 0.3s;
 }
 input.cmn-toggle-round + label:after {
   width: 16px;
   background-color: #fff;
   border-radius: 100%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  transition: margin 0.4s;
+  transition: margin 0.3s;
 }
 input.cmn-toggle-round:checked + label:before {
   background-color: #5AC8FB;
 }
 input.cmn-toggle-round:checked + label:after {
-  margin-left: 13px;
+  margin-left: 12px;
 }
 
 #top-switch {
 	margin-top: -27px; 
 	float: right; 
-	margin-right: 10px;
+	margin-right: 12px;
 }
 

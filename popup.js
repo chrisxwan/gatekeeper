@@ -1,6 +1,5 @@
 /* Tell filter.js to do its job */
 var communicateReady = function() {
-	console.log('sending message');
 	chrome.tabs.query({
         active: true,
         currentWindow: true
@@ -12,41 +11,66 @@ var communicateReady = function() {
     });
 };
 
+var communicateTwitter = function() {
+	chrome.tabs.query({
+		active: true,
+		currentWindow: true
+	}, function (tabs) {
+		chrome.tabs.sendMessage(
+			tabs[0].id,
+			{from: 'popup', subject: 'twitter'});
+	});
+};
+
 $(function() {
 	var hashtags = {}; //add trending hashtags from twitter
 	var keywords = []; //add user input keywords
 	$(document).ready(function() {
 		/* Get the Twitter trends */
-		setTimeout(function() {
 			chrome.runtime.sendMessage({
 				message: 'twitter'
 			}, function(responseText) {
 			    var raw = JSON.parse(responseText)[0]["trends"];
-			    chrome.storage.sync.get("getTwitter", function (result) {
-			    	var colors = ['gray', 'gray', 'gray', 'gray', 'gray', 'gray', 'gray', 'gray', 'gray', 'gray'];
-			    	if(result.getTwitter === undefined) {
-			    		chrome.storage.sync.set({
-			    			getTwitter: false
-			    		}, function() {
-			    			console.log('twitter initialized to false');
-			    		});
-			    	} else if(result.getTwitter === true) {
-			    		colors = ['palette-1', 'palette-2', 'palette-3', 'palette-4', 'palette-5', 'palette-6', 'palette-7', 'palette-8', 'palette-9', 'palette-10'];	
-			    	}
-			    	for(x=0; x<raw.length; x++) {
-						var trend = raw[x].name;
-						var c = "btn btn-xs " + colors[x];
-						console.log(c);
-						var htmlString = '<div class="col-xs-6"><button type="submit" class="btn btn-xs trend ' + colors[x] + '">' + trend + '</button></div>';
-						$('#hashtags').append(htmlString);
-						console.log(htmlString);
-					}
-			    });
+			    setTimeout(function() {
+			    	$('.cmn-toggle-round').prop("checked", true);
+			    	chrome.storage.sync.get("getTwitter", function (result) {
+				    	var colors = ['palette-1', 'palette-2', 'palette-3', 'palette-4', 'palette-5', 'palette-6', 'palette-7', 'palette-8', 'palette-9', 'palette-10'];
+				    	var htmlSnippet = '<div class="col-xs-6"><button type="submit" class="btn btn-xs trend ';
+				    	if(result.getTwitter === undefined) {
+				    		chrome.storage.sync.set({
+				    			getTwitter: true
+				    		});
+				    	} else if(result.getTwitter === false) {
+				    		htmlSnippet += 'gray ';
+				    		$('.cmn-toggle-round').prop("checked", false);
+				    	}
+				    	for(x=0; x<raw.length; x++) {
+							var trend = raw[x].name;
+							var htmlString = htmlSnippet + colors[x] + '">' + trend + '</button></div>';
+							$('#hashtags').append(htmlString);
+							console.log(htmlString);
+						}
+				    });
+			    }, 99);    
 			});
-		}, 140);
 
 		$('.cmn-toggle-round').click(function() {
-			console.log('clicked');
+			chrome.storage.sync.get("getTwitter", function (result) {
+				if(result.getTwitter === false) {
+					$('.trend').removeClass('gray');
+					chrome.storage.sync.set({
+						getTwitter: true
+					}, function() {
+						console.log('talking to backend');
+						communicateTwitter();
+					});
+				} else {
+					$('.trend').addClass('gray');
+					chrome.storage.sync.set({
+						getTwitter: false
+					});
+				}
+			});
 		});
 
 		/* Populate the user blacklists in the UI */

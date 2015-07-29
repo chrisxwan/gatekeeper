@@ -50,9 +50,14 @@ var filterTicker = function (elt) {
  * If so, filter the feed to account for those changes */
 chrome.runtime.onMessage.addListener(function(msg, sender) {
     /* First, validate the message's structure */
-    if ((msg.from === 'popup') && (msg.subject === 'filter')) {
-    	filterFeed();
-    }
+    if (msg.from === 'popup') {
+    	if (msg.subject === 'filter') {
+    		filterFeed();
+    	} else if (msg.subject === 'twitter') {
+    		console.log('message received');
+    		filterTwitter();
+    	}
+    } 
 });
 
 
@@ -63,7 +68,7 @@ var filterFeed = function() {
 		 * items from the database before doing anything else */
 		function (callback) {
 			chrome.storage.sync.get("userBlacklist", function (result) {
-				blacklist = result.userBlacklist;
+				blacklist = result.userBlacklist === undefined ? [] : result.userBlacklist;
 			});
 			callback(null, 'failed to retrieve from db');
 			chrome.storage.sync.get("threshold", function (result) {
@@ -128,19 +133,23 @@ observer.observe(document.getElementById('pagelet_ticker'), {
 
 
 /* Tell background.js to get the Twitter trends */
-chrome.runtime.sendMessage({
-	message: 'twitter'
-}, function(responseText) {
-    var raw = JSON.parse(responseText)[0]["trends"];
-	for(x=0; x<raw.length; x++) {
-		twitterTrends.push(raw[x].name);
-		console.log(raw[x].name);
-	}
-	filterFeed();
-});
+var filterTwitter = function() {
+	chrome.runtime.sendMessage({
+		message: 'twitter'
+	}, function(responseText) {
+	    var raw = JSON.parse(responseText)[0]["trends"];
+	    chrome.storage.sync.get("getTwitter", function (result) {
+	    	if(result.getTwitter === true || result.getTwitter === undefined) {
+	    		for(x=0; x<raw.length; x++) {
+					twitterTrends.push(raw[x].name);
+				}
+	    	}
+	    	filterFeed();
+	    });	
+	});
+}
 
-		
-
+filterTwitter();
 
 /* MUST HAVES */
 /** Step 1. Grab Twitter trending tweets globally (excluding hashtags)
