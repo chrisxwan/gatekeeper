@@ -31,7 +31,7 @@ var filter = function (elt, text){
 	var concatenatedBlacklist = list.join(" ");
 	tfidf.addDocument(text);
 	for(j = 0; j < list.length; j++){
-		if(tfidf.tfidf(list[j], tfidfCounter) > .05 || sentiment(text).score < threshold-50) {
+		if(tfidf.tfidf(list[j], tfidfCounter) > .05 || sentiment(text).score < threshold/2-25) {
 			$(elt).remove();
 			break;
 		}
