@@ -148,7 +148,7 @@ $(function() {
 				chrome.storage.sync.set({
 					threshold: v
 				}, function() {
-					console.log(threshold);
+					console.log(v);
 					communicateReady();
 				});
 			}

@@ -31,7 +31,9 @@ var filter = function (elt, text){
 	var concatenatedBlacklist = list.join(" ");
 	tfidf.addDocument(text);
 	for(j = 0; j < list.length; j++){
-		if(tfidf.tfidf(list[j], tfidfCounter) > .05 || sentiment(text).score < threshold/2-25) {
+		if(tfidf.tfidf(list[j], tfidfCounter) > .05 || sentiment(text).score < threshold/2-30) {
+			console.log(threshold);
+			console.log(sentiment(text).score);
 			$(elt).remove();
 			break;
 		}
@@ -72,7 +74,7 @@ var filterFeed = function() {
 			});
 			callback(null, 'failed to retrieve from db');
 			chrome.storage.sync.get("threshold", function (result) {
-				threshold = result.threshold;
+				threshold = result.threshold === undefined ? 0 : result.threshold;
 			});
 		},
 		function (callback) {
@@ -171,7 +173,7 @@ exports.version = "3.1";	// this is the WordNet DB version
 exports.path = require('path').join(__dirname, "dict");
 exports.files = require('fs').readdirSync(exports.path);
 
-}).call(this,"/../node_modules/WNdb")
+}).call(this,"/node_modules/WNdb")
 },{"fs":122,"path":130}],3:[function(require,module,exports){
 (function (process,global){
 /*!
@@ -3099,7 +3101,7 @@ exports.getRoot = function getRoot (file) {
   }
 }
 
-}).call(this,require('_process'),"/../node_modules/lapack/node_modules/ffi/node_modules/bindings/bindings.js")
+}).call(this,require('_process'),"/node_modules/lapack/node_modules/ffi/node_modules/bindings/bindings.js")
 },{"_process":131,"fs":122,"path":130}],21:[function(require,module,exports){
 
 /**

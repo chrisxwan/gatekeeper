@@ -30,7 +30,9 @@ var filter = function (elt, text){
 	var concatenatedBlacklist = list.join(" ");
 	tfidf.addDocument(text);
 	for(j = 0; j < list.length; j++){
-		if(tfidf.tfidf(list[j], tfidfCounter) > .05 || sentiment(text).score < threshold/2-25) {
+		if(tfidf.tfidf(list[j], tfidfCounter) > .05 || sentiment(text).score < threshold/2-30) {
+			console.log(threshold);
+			console.log(sentiment(text).score);
 			$(elt).remove();
 			break;
 		}
@@ -71,7 +73,7 @@ var filterFeed = function() {
 			});
 			callback(null, 'failed to retrieve from db');
 			chrome.storage.sync.get("threshold", function (result) {
-				threshold = result.threshold;
+				threshold = result.threshold === undefined ? 0 : result.threshold;
 			});
 		},
 		function (callback) {

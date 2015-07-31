@@ -1,8 +1,15 @@
+html {
+	overflow-y: scroll;
+	overflow-x: scroll;
+}
+
 body {
 	position: relative;
 	width: 320px;
-	height: 480px;
+	height: 590px;
 	background-color: #F5F5F5;
+	overflow-y: scroll;
+	overflow-x: scroll;
 }
 button {
 	font-family: "Helvetica", "Arial", sans-serif;
