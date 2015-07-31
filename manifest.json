@@ -24,10 +24,8 @@
     },
   "permissions": [
     "tabs",
-    "https://ajax.googleapis.com/",
     "storage",
     "*://*.facebook.com/*",
-    "*://*.twitter.com/*",
     "http://906a26ef48081c60b08f-58945f604110abde655fc3bf34312b67.r15.cf5.rackcdn.com/trends.json"
   ]
 }
