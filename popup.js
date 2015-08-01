@@ -57,6 +57,7 @@ $(function() {
 		$('.cmn-toggle-round').click(function() {
 			chrome.storage.sync.get("getTwitter", function (result) {
 				if(result.getTwitter === false) {
+					console.log('sending twitter');
 					$('.trend').removeClass('gray');
 					chrome.storage.sync.set({
 						getTwitter: true

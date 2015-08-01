@@ -23,6 +23,23 @@ var filterFront = function (elt) {
 	filter(elt, text);
 }
 
+/* Tell background.js to get the Twitter trends */
+var filterTwitter = function() {
+	chrome.runtime.sendMessage({
+		message: 'twitter'
+	}, function(responseText) {
+	    var raw = JSON.parse(responseText)[0]["trends"];
+	    chrome.storage.sync.get("getTwitter", function (result) {
+	    	if(result.getTwitter === true || result.getTwitter === undefined) {
+	    		for(x=0; x<raw.length; x++) {
+					twitterTrends.push(raw[x].name);
+				}
+	    	}
+	    	filterFeed();
+	    });	
+	});
+}
+
 /* Given the HTML DOM element and the text to filter,
  * run it through the NLP API and the Sentiment Analysis API 
  * to determine whether it should be hidden */
@@ -132,24 +149,6 @@ observer.observe(document.getElementById('pagelet_ticker'), {
 
 
 
-
-
-/* Tell background.js to get the Twitter trends */
-var filterTwitter = function() {
-	chrome.runtime.sendMessage({
-		message: 'twitter'
-	}, function(responseText) {
-	    var raw = JSON.parse(responseText)[0]["trends"];
-	    chrome.storage.sync.get("getTwitter", function (result) {
-	    	if(result.getTwitter === true || result.getTwitter === undefined) {
-	    		for(x=0; x<raw.length; x++) {
-					twitterTrends.push(raw[x].name);
-				}
-	    	}
-	    	filterFeed();
-	    });	
-	});
-}
 
 filterTwitter();
 
