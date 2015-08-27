@@ -7,8 +7,8 @@ var tfidf = new TfIdf();
 
 var tfidfCounter = 0;
 var concatenatedTrends = "";
-var twitterTrends = [];
-var blacklist = [];
+var twitterTrends = [""];
+var blacklist = [""];
 var threshold = 0; 
 
 
@@ -48,9 +48,7 @@ var filter = function (elt, text){
 	var concatenatedBlacklist = list.join(" ");
 	tfidf.addDocument(text);
 	for(j = 0; j < list.length; j++){
-		if(tfidf.tfidf(list[j], tfidfCounter) > .05 || sentiment(text).score < threshold/2-30) {
-			console.log(threshold);
-			console.log(sentiment(text).score);
+		if(tfidf.tfidf(list[j], tfidfCounter) > .05 || sentiment(text).score < Math.sqrt(threshold * 5) - 15) {
 			$(elt).remove();
 			break;
 		}
@@ -71,6 +69,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender) {
     /* First, validate the message's structure */
     if (msg.from === 'popup') {
     	if (msg.subject === 'filter') {
+    		console.log('message received from popup');
     		filterFeed();
     	} else if (msg.subject === 'twitter') {
     		console.log('message received');
@@ -119,11 +118,14 @@ var filterFeed = function() {
  * This hack is mainly used to detect AJAX load and infinite scroll.
  */
 MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-var observer = new MutationObserver(function(mutations, observer) {
+var feedObserver = new MutationObserver(function(mutations) {
     // fired when a mutation occurs
     filterFeed();
 });
 
+var tickerObserver = new MutationObserver(function(mutations) {
+	filterFeed();
+})
 
 // observer.observe(document, {
 //   subtree: true,
@@ -137,12 +139,12 @@ var observer = new MutationObserver(function(mutations, observer) {
  */
 
 
-observer.observe(document.getElementById('contentCol'), {
+feedObserver.observe(document.getElementById('content'), {
   subtree: true,
   childList: true
 });
 
-observer.observe(document.getElementById('pagelet_ticker'), {
+tickerObserver.observe(document.getElementById('pagelet_ticker'), {
 	subtree: true,
 	childList: true
 });
@@ -152,19 +154,6 @@ observer.observe(document.getElementById('pagelet_ticker'), {
 
 filterTwitter();
 
-/* MUST HAVES */
-/** Step 1. Grab Twitter trending tweets globally (excluding hashtags)
-  * Step 2. Parse the HTML DOM using jQuery. 
-  *         Grab elements with ID substring "hyperfeed_story_id" > Grab p tag > Concatenate
-  * Step 3. Use Natural to evaluate similarities
-  * Step 4. Write background process to detect AJAX load
-  */
-
-/* NICE TO HAVES */
-/** 1. Degree of conservatism.
-  * 2. Permanent storage by manually adding filters.
-  * 3. Display trends in popup.html
-  */
 },{"async":3,"natural":33,"sentiment":120}],2:[function(require,module,exports){
 (function (__dirname){
 

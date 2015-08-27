@@ -118,7 +118,7 @@ $(function() {
 
 		/* Settings for dial bar */
 		var dialColor = '#00CCCC';
-		var threshold;
+		var threshold = 0;
 
 		chrome.storage.sync.get("threshold", function (result) {
 			if(result.threshold === undefined) {
@@ -127,12 +127,10 @@ $(function() {
 				}, function() {
 					console.log(threshold);
 				});
-				threshold = 0;
-				$('.dial').val(threshold).trigger('change');
 			} else {
 				threshold = result.threshold;
-				$('.dial').val(threshold).trigger('change');
 			}
+			$('.dial').val(threshold).trigger('change');
 		});
 		$(".dial").knob({
 			'min': 0,
