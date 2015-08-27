@@ -48,7 +48,6 @@ $(function() {
 							var trend = raw[x].name;
 							var htmlString = htmlSnippet + colors[x] + '">' + trend + '</button></div>';
 							$('#hashtags').append(htmlString);
-							console.log(htmlString);
 						}
 				    });
 			    }, 99);    
@@ -57,12 +56,10 @@ $(function() {
 		$('.cmn-toggle-round').click(function() {
 			chrome.storage.sync.get("getTwitter", function (result) {
 				if(result.getTwitter === false) {
-					console.log('sending twitter');
 					$('.trend').removeClass('gray');
 					chrome.storage.sync.set({
 						getTwitter: true
 					}, function() {
-						console.log('talking to backend');
 						communicateTwitter();
 					});
 				} else {
@@ -102,7 +99,6 @@ $(function() {
 
 		/* Delete blacklist in UI */
 		$("body").on('click', '#delete', function() {
-			console.log('clicked');
 			del($(this));
 		});
 
@@ -125,7 +121,6 @@ $(function() {
 				chrome.storage.sync.set({
 					threshold: 0
 				}, function() {
-					console.log(threshold);
 				});
 			} else {
 				threshold = result.threshold;
@@ -147,7 +142,6 @@ $(function() {
 				chrome.storage.sync.set({
 					threshold: v
 				}, function() {
-					console.log(v);
 					communicateReady();
 				});
 			}
@@ -157,7 +151,6 @@ $(function() {
 		/* Delete from the user blacklist */
 		var del = function(elem) {
 			var blockedString = $(elem).parent().siblings().text();
-			console.log(blockedString);
 			chrome.storage.sync.get("userBlacklist", function (result) {
 				var userList = result.userBlacklist;
 				var index = userList.indexOf(blockedString);
@@ -165,7 +158,6 @@ $(function() {
 				chrome.storage.sync.set({
 					userBlacklist: userList
 				}, function() {
-					console.log('value deleted');
 				});
 			});
 		};
@@ -188,12 +180,10 @@ $(function() {
 			chrome.storage.sync.get("userBlacklist", function (result) {
 				var currentBlacklist = result.userBlacklist === undefined ? []: result.userBlacklist;
 				if(currentBlacklist.indexOf(val) === -1) {
-					console.log(currentBlacklist);
 					currentBlacklist.push(val);
 					chrome.storage.sync.set({
 						userBlacklist: currentBlacklist
 					}, function() {
-						console.log('value added to blacklist');
 						communicateReady();
 					});
 				}
