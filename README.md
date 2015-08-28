@@ -19,6 +19,7 @@ This is not the Chrome extension itself. There are many things in this repositor
 ```browserify js/filter.js -o js/bundle.js```
 
 You can now download the actual extension at www.bit.ly/fbgatekeeper
+
 I'm also on Product Hunt! http://www.producthunt.com/tech/gatekeeper
 
 Thanks!
