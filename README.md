@@ -23,3 +23,6 @@ You can now download the actual extension at www.bit.ly/fbgatekeeper
 I'm also on Product Hunt! http://www.producthunt.com/tech/gatekeeper
 
 Thanks!
+
+**TODO:**
+Filter out posts in other languages
